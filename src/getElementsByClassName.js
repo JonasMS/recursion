@@ -14,24 +14,25 @@
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function(className){
 	var choiceEls = [];
-	// var elements;
-	var els;
 	var body = document.body;
 
 	var searchEl = function(element){
-		// elements = [element].push(element.childNodes);
 		var elements = element.childNodes;
 
 
 		for(var i = 0; i < elements.length; i++){
-			if(_.contains(elements[i].classList, className)){ choiceEls.push(elements[i]); }
+			if(_.contains(elements[i].classList, className)) { 
+				choiceEls.push(elements[i]); 
+			}
 			searchEl(elements[i]);
 		}
 	}
 
-	if(_.contains(body.classList, className)){ choiceEls.push(body); }
+	if(_.contains(body.classList, className)){ 
+		choiceEls.push(body); 
+	}
 	searchEl(body);
 
 	return choiceEls;
-
 };
+

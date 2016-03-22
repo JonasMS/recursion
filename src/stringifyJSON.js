@@ -23,24 +23,20 @@ Solution:
 
 */ 
 
-//NOTE: will cleanup if time	
-
 var stringifyJSON = function(value) {
 	var jsonString = "";
 
 	var getString = function(val){ 
 		var content = [];
 
-		if(typeof val === 'boolean' || typeof val === 'number' || val === null){
+		if(equivType(val, 'boolean', 'number') || equivVal(val, null)){
 			return val;
-		}
+		} 
 
-		//if string
-		else if(typeof val === 'string'){
+		else if(equivType(val, 'string')){
 			return '"' + val + '"';
 		}
 
-		//else if array
 		else if (Array.isArray(val)){
 			val.forEach(function(el){
 				content.push(getString(el));
@@ -48,26 +44,39 @@ var stringifyJSON = function(value) {
 			content = content.join(",");
 			return "[" + content + "]";
 		}
-		//else if object
-		else if (typeof val === 'object'){
+
+		else if (equivType(val, 'object')){
 			for(var key in val){
-				if(typeof val[key] != 'function' && val[key] !== undefined){
+				if(!equivType(val[key], 'function') && !equivVal(val[key], undefined)){
 				content.push(getString(key) + ':' + getString(val[key]));
 				}
 			}
 			content = content.join(",");
 			return "{" + content + "}";
-		}
-
-		//else if bool OR num
-		//TODO: else { return val; } ?
-		else if(typeof val === 'boolean' || typeof val === 'number' ){
-			return val;
-		}
+		} 
+		else { return val; }
 	}
 
 	jsonString += getString(value);
-
-	// jsonString =  "'" + jsonString + "'";
 	return jsonString;
 };
+
+
+var equivType = function(value) {
+	for(var i = 1; i < arguments.length; i++){
+		if(typeof value === arguments[i]){
+			return true;
+		}
+	}
+	return false;
+}
+
+var equivVal = function(value) {
+	for(var i = 1; i < arguments.length; i++){
+		if(value === arguments[i]){
+			return true;
+		}
+	}
+	return false;
+}
+
